@@ -2,9 +2,10 @@ import { AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-types
 
 @Table
 export class Account extends Model {
-    @Column
+
     @PrimaryKey
     @AutoIncrement
+    @Column
     id: number;
 
     @Column
