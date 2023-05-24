@@ -23,4 +23,14 @@ export class AccountService{
         })
         return newAccount;
     }
+
+    async accountExists(id: number){
+        const dupAccount = await this.accountModel.findOne({
+            where: {
+                id
+            }
+        });
+        if(dupAccount !== null) return true;
+        return false
+    }
 }

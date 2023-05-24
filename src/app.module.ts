@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { AccountModule } from './accounts/accounts.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Account } from './accounts/accounts.entity';
+import { SettingsModule } from './settings/settings.module';
+import { Settings } from './settings/settings.entity';
 
 @Module({
   imports: [
@@ -14,9 +16,10 @@ import { Account } from './accounts/accounts.entity';
       username: 'root',
       password: "BITS@lite",
       database: "Clearfeed_Starter",
-      models: [Account],
+      models: [Account,Settings],
     }),
     AccountModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
