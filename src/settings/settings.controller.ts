@@ -16,6 +16,9 @@ export class SettingsController {
         @Body('accountId') account_id: number,
         @Body('value') value: any,
     ){
+        if(!name || !data_type || account_id===undefined || value===undefined)
+            throw new BadRequestException();
+
         const accountExists = await this.accountsService.accountExists(account_id)
         if(!accountExists)
             throw new NotFoundException("Account not found!");
@@ -34,6 +37,9 @@ export class SettingsController {
         @Body('accountId') account_id: number,
         @Body('value') value: any,
     ){
+        if(!name || account_id===undefined || value===undefined)
+            throw new BadRequestException();
+
         const accountExists = await this.accountsService.accountExists(account_id)
         if(!accountExists)
             throw new NotFoundException("Account not found!");
@@ -49,6 +55,9 @@ export class SettingsController {
         @Body('name') name: string,
         @Body('accountId') account_id: number,
     ){
+        if(!name || account_id===undefined)
+            throw new BadRequestException();
+
         const accountExists = await this.accountsService.accountExists(account_id)
         if(!accountExists)
             throw new NotFoundException("Account not found!");
