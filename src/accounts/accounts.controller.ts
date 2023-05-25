@@ -8,11 +8,19 @@ export class AccountController{
     ) {}
     @Post('signup')
     async createNewAccount(
-        @Body('name') name: string
+        @Body('name') name: string,
+        @Body('password') password: string
     ){
-        if(!name)
+        if(!name || !password)
             throw new BadRequestException();
-        const newAccount = await this.accountService.addNewAccountToDB(name);
-        return newAccount;
+        const hashedPassword = await this.accountService.hashPassword(password);
+        const {
+            id,
+            createdAt
+        } = await this.accountService.addNewAccountToDB(name,hashedPassword);
+        return {
+            id,
+            createdAt
+        };
     }
 }

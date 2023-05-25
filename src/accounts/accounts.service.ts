@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from "@nestjs/common";
 import { Account } from "./accounts.entity";
 import { InjectModel } from "@nestjs/sequelize";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AccountService{
@@ -9,7 +10,7 @@ export class AccountService{
         private accountModel: typeof Account,
     ) {}
 
-    async addNewAccountToDB(name: string){
+    async addNewAccountToDB(name: string, hashedPassword:string){
         const dupAccount = await this.accountModel.findOne({
             where: {
                 name
@@ -19,18 +20,26 @@ export class AccountService{
             throw new ConflictException("User already exists with same name");
         
         const newAccount = await this.accountModel.create({
-            name
+            name,
+            password: hashedPassword
         })
         return newAccount;
     }
 
-    async accountExists(id: number){
+    async accountExists(id: number, password: string){
         const dupAccount = await this.accountModel.findOne({
             where: {
                 id
             }
         });
-        if(dupAccount !== null) return true;
-        return false
+        if(dupAccount === null) return false;
+        const passwordCorrect = await bcrypt.compare(password, dupAccount.password);
+        if(passwordCorrect) return true;
+        else return false;
+    }
+
+    async hashPassword(password: string){
+        const hashedPassword = await bcrypt.hash(password, 10)
+        return hashedPassword
     }
 }

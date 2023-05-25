@@ -12,6 +12,9 @@ export class Account extends Model {
     name: string;
 
     @Column
+    password: string;
+
+    @Column
     createdAt: Date;
 
     @Column
